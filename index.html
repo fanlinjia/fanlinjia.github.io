@@ -1,59 +1,128 @@
-<style>
-    body{
-        background-color: rgb(172, 180, 248);
-        text-align: center;
-        font-family: sans-serif;
-    }
-    h1{
-        color:rgb(60, 63, 255) ;
-        text-shadow: 0 0 20px #003bfd;
-    }
-    img{
-        border-radius: 50%;
-        border: 4px solid #003bfd;
-        box-shadow:0 0 10px #003bfd;
-    }
-    a{
-        text-decoration: none;
-    }
-    @keyframes abc{
-        0% {transform: translateX(20px);}
-        100%{transform: translateX(-20xp);}
-    }
-    a h1{
-        animation: abc 1.5s ease-in-out infinite alternate;
-        color: blueviolet;
-        text-shadow: 0 0 20px blueviolet;
-    }
-    h2{
-        color: #003bfd;
-        text-shadow: 0 0 20px #003bfd;
-    }
-</style>
-<h1>范林嘉的网站</h1>
-<img src="泠攸.png"width=300>
-<h2>泠攸</h2>
-<a href="https://space.bilibili.com/1675761755">
-        <h1>
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>范林嘉的网站</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            background-color: rgb(172, 180, 248);
+            text-align: center;
+            font-family: sans-serif;
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+        .main-title {
+            color: rgb(60, 63, 255);
+            text-shadow: 0 0 20px #003bfd;
+            font-size: 42px;
+            margin-bottom: 30px;
+        }
+        .avatar {
+            border-radius: 50%;
+            border: 4px solid #003bfd;
+            box-shadow: 0 0 15px #003bfd;
+            width: 300px;
+            max-width: 70%;
+            margin-bottom: 20px;
+            transition: 0.3s;
+        }
+        .avatar:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 25px #003bfd;
+        }
+        .name-text {
+            color: #003bfd;
+            text-shadow: 0 0 20px #003bfd;
+            font-size: 28px;
+            margin-bottom: 40px;
+        }
+        a {
+            text-decoration: none;
+            display: block;
+            width: 100%;
+            max-width: 460px;
+            margin: 18px auto;
+        }
+        @keyframes shake {
+            0% {transform: translateX(20px);}
+            100% {transform: translateX(-20px);}
+        }
+        .nav-btn {
+            animation: shake 1.5s ease-in-out infinite alternate;
+            color: blueviolet;
+            text-shadow: 0 0 20px blueviolet;
+            font-size: 32px;
+            padding: 14px;
+            border-radius: 12px;
+            background: rgba(138, 43, 226, 0.1);
+            transition: all 0.3s;
+        }
+        .nav-btn:hover {
+            background: rgba(138, 43, 226, 0.25);
+            transform: scale(1.03);
+        }
+        .qq-info {
+            color: #003bfd;
+            text-shadow: 0 0 12px #003bfd;
+            font-size: 24px;
+            margin-top: 50px;
+        }
+        svg {
+            width: 28px;
+            height: 28px;
+            vertical-align: middle;
+            margin-right: 10px;
+            fill: blueviolet;
+        }
+    </style>
+</head>
+<body>
+    <h1 class="main-title">范林嘉的网站</h1>
+    <img class="avatar" src="泠攸.png" alt="泠攸头像">
+    <h2 class="name-text">泠攸</h2>
+
+    <a href="https://space.bilibili.com/1675761755">
+        <h1 class="nav-btn">
+            <svg viewBox="0 0 24 24">
+                <path d="M17.813 4.653h.854c1.51.054 2.769.578 3.723 1.547 1.047.97 1.62 2.289 1.61 3.747v7.22c0 1.458-.573 2.777-1.61 3.747-.954.969-2.213 1.493-3.723 1.547H5.187c-1.51-.054-2.769-.578-3.723-1.547C.417 20.127-.156 18.808-.166 17.35V9.13c0-1.458.573-2.777 1.61-3.747.954-.969 2.213-1.493 3.723-1.547h.77l-1.174 1.173a1.624 1.624 0 0 0-1.146.473 1.617 1.617 0 0 0-.474 1.147v6.834c0 .427.17.837.474 1.147.31.306.72.473 1.146.473a1.624 1.624 0 0 0 1.147-.473L12 13.046l6.023 6.023a1.624 1.624 0 0 0 1.147.473c.426 0 .836-.167 1.146-.473.305-.31.474-.72.474-1.147V8.385c0-.427-.17-.837-.474-1.147a1.624 1.624 0 0 0-1.146-.473l-1.357-1.112zm-9.36 7.207v1.066h1.067v-1.066H8.453zm4.027 0v1.066h1.067v-1.066h-1.067z"/>
+            </svg>
             🔥我的B站主页🔥
         </h1>
-</a>
-<a href="https://space.bilibili.com/3546894596836069">
-        <h1>
+    </a>
+
+    <a href="https://space.bilibili.com/3546894596836069">
+        <h1 class="nav-btn">
+            <svg viewBox="0 0 24 24">
+                <path d="M17.813 4.653h.854c1.51.054 2.769.578 3.723 1.547 1.047.97 1.62 2.289 1.61 3.747v7.22c0 1.458-.573 2.777-1.61 3.747-.954.969-2.213 1.493-3.723 1.547H5.187c-1.51-.054-2.769-.578-3.723-1.547C.417 20.127-.156 18.808-.166 17.35V9.13c0-1.458.573-2.777 1.61-3.747.954-.969 2.213-1.493 3.723-1.547h.77l-1.174 1.173a1.624 1.624 0 0 0-1.146.473 1.617 1.617 0 0 0-.474 1.147v6.834c0 .427.17.837.474 1.147.31.306.72.473 1.146.473a1.624 1.624 0 0 0 1.147-.473L12 13.046l6.023 6.023a1.624 1.624 0 0 0 1.147.473c.426 0 .836-.167 1.146-.473.305-.31.474-.72.474-1.147V8.385c0-.427-.17-.837-.474-1.147a1.624 1.624 0 0 0-1.146-.473l-1.357-1.112zm-9.36 7.207v1.066h1.067v-1.066H8.453zm4.027 0v1.066h1.067v-1.066h-1.067z"/>
+            </svg>
             🔥我的小号B站主页🔥
         </h1>
-</a>
-<a href="downloads.html">
-        <h1>
+    </a>
+
+    <a href="downloads.html">
+        <h1 class="nav-btn">
+            <svg viewBox="0 0 24 24">
+                <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/>
+            </svg>
             下载页面
         </h1>
-</a>
-<h2>
-    我的QQ:3861238219(棍母)
-</h2>
-<script>
-    var n = 3;
-    for(var i=1;i<=n;i++){
-        alert("防人机装置，请点击3次确定，谢谢(第"+i+"次)")
-    }
-</script>
+    </a>
+
+    <h2 class="qq-info">我的QQ:3861238219(棍母)</h2>
+
+    <script>
+        window.onload = function() {
+            const times = 3;
+            for(let i = 1; i <= times; i++) {
+                alert(`防人机验证，请点击确定（第${i}/${times}次）`);
+            }
+        }
+    </script>
+</body>
+</html>
