@@ -1,35 +1,81 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
-<style>
-    body{
-        background-color: rgb(172, 180, 248);
-        font-family: sans-serif;
-    }
-    h1{
-        color:rgb(60, 63, 255) ;
-        text-shadow: 0 0 20px #003bfd;
-    }
-    a{
-        text-decoration: none;
-    }
-    @keyframes abc{
-        0% {transform: translateX(20px);}
-        100%{transform: translateX(-20xp);}
-    }
-    a h1{
-        animation: abc 1.5s ease-in-out infinite alternate;
-        color: blueviolet;
-        text-shadow: 0 0 20px blueviolet;
-    }
-</style>
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>应用下载页面</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body{
+            background-color: rgb(172, 180, 248);
+            font-family: sans-serif;
+            min-height: 100vh;
+            /* 页面居中 */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        h1{
+            color:rgb(60, 63, 255) ;
+            text-shadow: 0 0 20px #003bfd;
+            margin-bottom: 40px;
+            font-size: 42px;
+        }
+        .download-box{
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            width: 100%;
+            max-width: 450px;
+        }
+        a{
+            text-decoration: none;
+        }
+        .download-btn{
+            display:block;
+            padding:16px 24px;
+            background-color: #6366ff;
+            color: white;
+            text-align: center;
+            border-radius: 12px;
+            font-size: 18px;
+            box-shadow: 0 4px 12px rgba(60,63,255,0.4);
+            transition: all 0.3s ease;
+        }
+        .download-btn:hover{
+            background-color: #4346e8;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 18px rgba(60,63,255,0.55);
+        }
+        .back-btn{
+            background-color: #8b5cf6;
+        }
+        .back-btn:hover{
+            background-color: #7042d4;
+        }
+        @keyframes abc{
+            0% {transform: translateX(20px);}
+            100%{transform: translateX(-20px);}
+        }
+        .shake-title{
+            animation: abc 1.5s ease-in-out infinite alternate;
+            color: blueviolet;
+            text-shadow: 0 0 20px blueviolet;
+        }
+    </style>
 </head>
 <body>
-    <h1>应用下载</h1>
-    <a href="index.html">返回首页</a>
-    <a href="/downloads/steam.exe" download>   点击下载自制steam</a>
-    <a href="/downloads/小游戏大全.exe" download>    点击下载小游戏大全</a>
+    <h1 class="shake-title">应用下载</h1>
+    <div class="download-box">
+        <a href="index.html" class="download-btn back-btn">返回首页</a>
+        <a href="/downloads/steam.exe" download class="download-btn">点击下载自制steam</a>
+        <a href="/downloads/小游戏大全.exe" download class="download-btn">点击下载小游戏大全</a>
+    </div>
 </body>
 </html>
