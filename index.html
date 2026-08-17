@@ -80,34 +80,36 @@
             margin-right: 10px;
             fill: blueviolet;
         }
-        /* 关键：外层盒子，和上面导航按钮一样宽，自动居中 */
         .btn-outer{
             max-width:460px;
             margin:30px auto 0 auto;
         }
+        /* 增加flex‑wrap，空间不足自动换行，不会挤压重叠 */
         .btn-wrap{
             display:flex;
-            gap:14px;
+            gap:12px;
             justify-content:center;
             align-items:center;
+            flex-wrap: wrap;
         }
         .music-btn{
-            padding:12px 24px;
-            font-size:17px;
+            padding:10px 14px;
+            font-size:14px;
             border:none;
             border-radius:10px;
             background:#8b5cf6;
             color:white;
             cursor:pointer;
             transition:0.3s;
+            flex-shrink:0;
         }
         .music-btn:hover{
             background:#7042d4;
             transform: translateY(-2px);
         }
         .netease-btn{
-            width:46px;
-            height:46px;
+            width:42px;
+            height:42px;
             border-radius:50%;
             background:#c24641;
             border:none;
@@ -116,16 +118,32 @@
             align-items:center;
             justify-content:center;
             transition:0.3s;
+            flex-shrink:0;
         }
         .netease-btn:hover{
             transform: translateY(-2px);
             box-shadow:0 4px 12px rgba(194,70,65,0.45);
         }
         .netease-btn svg{
-            width:24px;
-            height:24px;
+            width:22px;
+            height:22px;
             fill:#ffffff;
             margin:0;
+        }
+        .progress-box{
+            flex:1;
+            min-width:180px;
+        }
+        #progressBar{
+            width:100%;
+            cursor:pointer;
+        }
+        .time-text{
+            display:flex;
+            justify-content:space-between;
+            font-size:12px;
+            color:#222266;
+            margin-top:4px;
         }
     </style>
 </head>
@@ -163,10 +181,16 @@
 
     <h2 class="qq-info">我的QQ:3861238219(棍母)</h2>
 
-    <!-- btn‑outer 这一层负责居中 -->
     <div class="btn-outer">
         <div class="btn-wrap">
             <button class="music-btn" id="musicToggle">开启背景音乐</button>
+            <div class="progress-box">
+                <input type="range" id="progressBar" min="0" max="100" value="0">
+                <div class="time-text">
+                    <span id="currentTime">00:00</span>
+                    <span id="totalTime">00:00</span>
+                </div>
+            </div>
             <a target="_blank" href="https://music.163.com/song?id=39227633&uct2=U2FsdGVkX1/YtLgLNEPfFovJOsNlWn9Dx3k0ZremJIE=">
                 <button class="netease-btn">
                     <svg viewBox="0 0 24 24">
@@ -184,7 +208,29 @@
     <script>
         const audio = document.getElementById("bgMusic");
         const toggleBtn = document.getElementById("musicToggle");
+        const progressBar = document.getElementById("progressBar");
+        const currentTimeEl = document.getElementById("currentTime");
+        const totalTimeEl = document.getElementById("totalTime");
         let musicPlayed = false;
+
+        function formatTime(sec){
+            let m = Math.floor(sec / 60);
+            let s = Math.floor(sec % 60);
+            return (m<10?"0"+m:m) + ":" + (s<10?"0"+s:s);
+        }
+
+        audio.addEventListener("loadedmetadata", ()=>{
+            totalTimeEl.innerText = formatTime(audio.duration);
+        })
+
+        audio.addEventListener("timeupdate", ()=>{
+            progressBar.value = (audio.currentTime / audio.duration) * 100;
+            currentTimeEl.innerText = formatTime(audio.currentTime);
+        })
+
+        progressBar.addEventListener("input", ()=>{
+            audio.currentTime = (progressBar.value / 100) * audio.duration;
+        })
 
         document.addEventListener("click",function(){
             if(!musicPlayed){
