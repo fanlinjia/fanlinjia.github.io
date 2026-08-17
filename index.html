@@ -80,6 +80,53 @@
             margin-right: 10px;
             fill: blueviolet;
         }
+        /* 关键：外层盒子，和上面导航按钮一样宽，自动居中 */
+        .btn-outer{
+            max-width:460px;
+            margin:30px auto 0 auto;
+        }
+        .btn-wrap{
+            display:flex;
+            gap:14px;
+            justify-content:center;
+            align-items:center;
+        }
+        .music-btn{
+            padding:12px 24px;
+            font-size:17px;
+            border:none;
+            border-radius:10px;
+            background:#8b5cf6;
+            color:white;
+            cursor:pointer;
+            transition:0.3s;
+        }
+        .music-btn:hover{
+            background:#7042d4;
+            transform: translateY(-2px);
+        }
+        .netease-btn{
+            width:46px;
+            height:46px;
+            border-radius:50%;
+            background:#c24641;
+            border:none;
+            cursor:pointer;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            transition:0.3s;
+        }
+        .netease-btn:hover{
+            transform: translateY(-2px);
+            box-shadow:0 4px 12px rgba(194,70,65,0.45);
+        }
+        .netease-btn svg{
+            width:24px;
+            height:24px;
+            fill:#ffffff;
+            margin:0;
+        }
     </style>
 </head>
 <body>
@@ -116,7 +163,48 @@
 
     <h2 class="qq-info">我的QQ:3861238219(棍母)</h2>
 
+    <!-- btn‑outer 这一层负责居中 -->
+    <div class="btn-outer">
+        <div class="btn-wrap">
+            <button class="music-btn" id="musicToggle">开启背景音乐</button>
+            <a target="_blank" href="https://music.163.com/song?id=39227633&uct2=U2FsdGVkX1/YtLgLNEPfFovJOsNlWn9Dx3k0ZremJIE=">
+                <button class="netease-btn">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm-1.086 9.568c.24-.84 1.075-1.541 1.99-1.648.187.694.388 1.373.545 2.063.053.23.037.495-.018.727-.213.892-1.248 1.242-1.978.685-.53-.405-.742-1.12-.539-1.827z"/>
+                    </svg>
+                </button>
+            </a>
+        </div>
+    </div>
+
+    <audio id="bgMusic" loop preload="auto">
+        <source src="His Theme.mp3" type="audio/mpeg">
+    
+
     <script>
+        const audio = document.getElementById("bgMusic");
+        const toggleBtn = document.getElementById("musicToggle");
+        let musicPlayed = false;
+
+        document.addEventListener("click",function(){
+            if(!musicPlayed){
+                audio.play();
+                musicPlayed = true;
+                toggleBtn.innerText = "关闭背景音乐";
+            }
+        })
+
+        toggleBtn.addEventListener("click",(e)=>{
+            e.stopPropagation();
+            if(audio.paused){
+                audio.play();
+                toggleBtn.innerText = "关闭背景音乐";
+            }else{
+                audio.pause();
+                toggleBtn.innerText = "开启背景音乐";
+            }
+        })
+
         window.onload = function() {
             const times = 3;
             for(let i = 1; i <= times; i++) {
