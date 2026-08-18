@@ -16,12 +16,60 @@
             font-family: sans-serif;
             min-height: 100vh;
             padding: 40px 20px;
+            transition: all 200ms ease;
         }
+        /* 黑夜模式body */
+        body.dark {
+            background-color: rgba(50,50,50,1);
+        }
+        /* 右上角昼夜切换开关 */
+        .theme-toggle-wrap{
+            position: fixed;
+            top:16px;
+            right:16px;
+            z-index:999;
+        }
+        .theme-box{
+            width: 120px;
+            height: 60px;
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            cursor:pointer;
+            transition: all 200ms ease;
+        }
+        body.light .theme-box{
+            background: #fdd6df;
+        }
+        body.dark .theme-box{
+            background: rgba(70,70,70,1);
+        }
+        .theme-knob{
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            border-radius: 25px;
+            transition: left 0.2s ease;
+        }
+        body.light .theme-knob{
+            left: 5px;
+            background: pink url(image/太阳.png) 6px 7px no-repeat;
+            background-size: 35px 35px;
+        }
+        body.dark .theme-knob{
+            left: 65px;
+            background: rgba(50,50,50,1) url(image/月亮.png) 6px 7px no-repeat;
+            background-size: 35px 35px;
+        }
+
         .main-title {
             color: rgb(60, 63, 255);
             text-shadow: 0 0 20px #003bfd;
             font-size: 42px;
             margin-bottom: 30px;
+        }
+        body.dark .main-title{
+            color:#9396ff;
         }
         .avatar {
             border-radius: 50%;
@@ -41,6 +89,9 @@
             text-shadow: 0 0 20px #003bfd;
             font-size: 28px;
             margin-bottom: 40px;
+        }
+        body.dark .name-text{
+            color:#6366ff;
         }
         a {
             text-decoration: none;
@@ -73,6 +124,9 @@
             font-size: 24px;
             margin-top: 50px;
         }
+        body.dark .qq-info{
+            color:#6366ff;
+        }
         svg {
             width: 28px;
             height: 28px;
@@ -84,7 +138,6 @@
             max-width:460px;
             margin:30px auto 0 auto;
         }
-        /* 增加flex‑wrap，空间不足自动换行，不会挤压重叠 */
         .btn-wrap{
             display:flex;
             gap:12px;
@@ -145,9 +198,19 @@
             color:#222266;
             margin-top:4px;
         }
+        body.dark .time-text{
+            color:#ccccff;
+        }
     </style>
 </head>
-<body>
+<body class="light">
+    <!-- 右上角昼夜切换开关 -->
+    <div class="theme-toggle-wrap">
+        <div onclick="openDark(this)" class="theme-box">
+            <div class="theme-knob"></div>
+        </div>
+    </div>
+
     <h1 class="main-title">范林嘉的网站</h1>
     <img class="avatar" src="泠攸.png" alt="泠攸头像">
     <h2 class="name-text">泠攸</h2>
@@ -206,6 +269,20 @@
     
 
     <script>
+        // 昼夜切换函数
+        function openDark(box) {
+            let body = document.body;
+            if (box.state == null) {
+                box.state = false;
+            }
+            if (box.state) {
+                body.className = "light";
+            } else {
+                body.className = "dark";
+            }
+            box.state = !box.state;
+        }
+
         const audio = document.getElementById("bgMusic");
         const toggleBtn = document.getElementById("musicToggle");
         const progressBar = document.getElementById("progressBar");
