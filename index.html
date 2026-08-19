@@ -18,11 +18,9 @@
             padding: 40px 20px;
             transition: all 200ms ease;
         }
-        /* 黑夜模式body */
         body.dark {
             background-color: rgba(50,50,50,1);
         }
-        /* 右上角昼夜切换开关 */
         .theme-toggle-wrap{
             position: fixed;
             top:16px;
@@ -37,6 +35,7 @@
             align-items: center;
             cursor:pointer;
             transition: all 200ms ease;
+            position:relative;
         }
         body.light .theme-box{
             background: #fdd6df;
@@ -50,27 +49,102 @@
             height: 50px;
             border-radius: 25px;
             transition: left 0.2s ease;
+            display:flex;
+            align-items:center;
+            justify-content:center;
         }
         body.light .theme-knob{
             left: 5px;
-            background: pink url(image/太阳.png) 6px 7px no-repeat;
-            background-size: 35px 35px;
+            background: pink;
         }
         body.dark .theme-knob{
             left: 65px;
-            background: rgba(50,50,50,1) url(image/月亮.png) 6px 7px no-repeat;
-            background-size: 35px 35px;
+            background: #323232;
         }
-
+        .theme-knob svg{
+            width:30px;
+            height:30px;
+            fill:#222;
+            margin:0;
+        }
+        body.dark .theme-knob svg{
+            fill:#eee;
+        }
         .main-title {
             color: rgb(60, 63, 255);
             text-shadow: 0 0 20px #003bfd;
             font-size: 42px;
-            margin-bottom: 30px;
+            margin-bottom:16px;
         }
         body.dark .main-title{
             color:#9396ff;
         }
+        .nav-wrap{
+            margin-bottom:16px;
+        }
+        .nav {
+            position: relative;
+            border: 1px solid #dfdfdf33;
+            border-radius: 999px;
+            display: inline-flex;
+            list-style: none;
+            padding:0;
+            box-shadow: 10px 20px 20px #00000033;
+            background-color: #f5f5f5;
+            height:36px;
+        }
+        body.dark .nav{
+            background-color:#383838;
+        }
+        .nav li{
+            display:flex;
+        }
+        .nav li a {
+            position: relative;
+            padding: 0 28px;
+            font-weight: 500;
+            font-size:16px;
+            border: none;
+            outline: none;
+            display:flex;
+            align-items:center;
+            text-decoration: none;
+            z-index: 3;
+            color: rgb(70, 100, 100);
+            cursor:pointer;
+        }
+        body.dark .nav li a{
+            color:#c5d0d0;
+        }
+        .slide,
+        .slide-shadow {
+            position: absolute;
+            display: inline-block;
+            top:0;
+            height:36px;
+            border-radius: 999px;
+            transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1.05);
+        }
+        .slide {
+            z-index: 2;
+            background-color: rgb(170, 190, 255);
+        }
+        .slide-shadow {
+            opacity: 0;
+            z-index: 1;
+            background-color: rgba(170, 190, 255, 0.5);
+            box-shadow: 0 0 20px #ffffffaa inset;
+        }
+        .squeeze {
+            transform: scale(0.9);
+        }
+        .page{
+            display:none;
+        }
+        .page.active{
+            display:block;
+        }
+        /*首页区块 */
         .avatar {
             border-radius: 50%;
             border: 4px solid #003bfd;
@@ -93,7 +167,7 @@
         body.dark .name-text{
             color:#6366ff;
         }
-        a {
+        a.block-link {
             text-decoration: none;
             display: block;
             width: 100%;
@@ -127,7 +201,7 @@
         body.dark .qq-info{
             color:#6366ff;
         }
-        svg {
+        .icon-svg {
             width: 28px;
             height: 28px;
             vertical-align: middle;
@@ -201,66 +275,156 @@
         body.dark .time-text{
             color:#ccccff;
         }
+        /*下载页面区块 */
+        .download-title{
+            font-size:42px;
+            margin-bottom:20px;
+            animation: abc 1.5s ease-in-out infinite alternate;
+            color: blueviolet;
+            text-shadow: 0 0 20px blueviolet;
+        }
+        body.dark .download-title{
+            color:#c5aaff;
+        }
+        @keyframes abc{
+            0% {transform: translateX(20px);}
+            100%{transform: translateX(-20px);}
+        }
+        .download-box{
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            width: 100%;
+            max-width: 480px;
+            margin:0 auto;
+        }
+        .download-item{
+            display: flex;
+            flex-direction: column;
+        }
+        .download-btn{
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            gap:10px;
+            padding:16px 24px;
+            background-color: #6366ff;
+            color: white;
+            text-align: center;
+            border-radius: 12px;
+            font-size: 18px;
+            box-shadow: 0 4px 12px rgba(60,63,255,0.4);
+            transition: all 0.3s ease;
+            text-decoration:none;
+        }
+        .download-btn:hover{
+            background-color: #4346e8;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 18px rgba(60,63,255,0.55);
+        }
+        .file-size{
+            font-size:14px;
+            color:#333366;
+            margin-top:8px;
+            text-align:center;
+        }
+        body.dark .file-size{
+            color:#ccccdd;
+        }
+        .dl-svg{
+            width:22px;
+            height:22px;
+            fill:white;
+        }
     </style>
 </head>
 <body class="light">
-    <!-- 右上角昼夜切换开关 -->
     <div class="theme-toggle-wrap">
         <div onclick="openDark(this)" class="theme-box">
-            <div class="theme-knob"></div>
+            <div class="theme-knob">
+                <svg class="sun" viewBox="0 0 24 24"><path d="M12 7a5 5 0 100 10 5 5 0 000-10zm0-5a1 1 0 011 1v2a1 1 0 11-2 0V3a1 1 0 011-1zm0 18a1 1 0 011 1v2a1 1 0 11-2 0v-2a1 1 0 011-1zM4.22 5.64a1 1 0 011.42-1.42l1.42 1.42a1 1 0 01-1.42 1.42L4.22 5.64zm12.74 12.74a1 1 0 011.42-1.42l1.42 1.42a1 1 0 01-1.42 1.42l-1.42-1.42zM3 13a1 1 0 010-2h2a1 1 0 110 2H3zm16 0a1 1 0 010-2h2a1 1 0 110 2h-2zM5.64 19.78a1 1 0 01-1.42-1.42l1.42-1.42a1 1 0 011.42 1.42l-1.42 1.42zm12.74-12.74a1 1 0 01-1.42-1.42l1.42-1.42a1 1 0 011.42 1.42l-1.42 1.42z"/></svg>
+                <svg class="moon" viewBox="0 0 24 24" style="display:none;"><path d="M12 3a9 9 0 109 9c0-.46-.04-.92-.1-1.36a5.389 5.389 0 01-4.4 2.26 5.403 5.403 0 01-3.14-9.8c-.44-.06-.9-.1-1.36-.1z"/></svg>
+            </div>
         </div>
     </div>
 
     <h1 class="main-title">范林嘉的网站</h1>
-    <img class="avatar" src="泠攸.png" alt="泠攸头像">
-    <h2 class="name-text">泠攸</h2>
+    <div class="nav-wrap">
+        <ul class="nav">
+            <li class="slide"></li>
+            <li class="slide-shadow"></li>
+            <li><a data-page="home">首页</a></li>
+            <li><a data-page="download">下载</a></li>
+        </ul>
+    </div>
 
-    <a href="https://space.bilibili.com/1675761755">
-        <h1 class="nav-btn">
-            <svg viewBox="0 0 24 24">
-                <path d="M17.813 4.653h.854c1.51.054 2.769.578 3.723 1.547 1.047.97 1.62 2.289 1.61 3.747v7.22c0 1.458-.573 2.777-1.61 3.747-.954.969-2.213 1.493-3.723 1.547H5.187c-1.51-.054-2.769-.578-3.723-1.547C.417 20.127-.156 18.808-.166 17.35V9.13c0-1.458.573-2.777 1.61-3.747.954-.969 2.213-1.493 3.723-1.547h.77l-1.174 1.173a1.624 1.624 0 0 0-1.146.473 1.617 1.617 0 0 0-.474 1.147v6.834c0 .427.17.837.474 1.147.31.306.72.473 1.146.473a1.624 1.624 0 0 0 1.147-.473L12 13.046l6.023 6.023a1.624 1.624 0 0 0 1.147.473c.426 0 .836-.167 1.146-.473.305-.31.474-.72.474-1.147V8.385c0-.427-.17-.837-.474-1.147a1.624 1.624 0 0 0-1.146-.473l-1.357-1.112zm-9.36 7.207v1.066h1.067v-1.066H8.453zm4.027 0v1.066h1.067v-1.066h-1.067z"/>
-            </svg>
-            🔥我的B站主页🔥
-        </h1>
-    </a>
+    <!-- 首页内容区块 -->
+    <div class="page active" id="page-home">
+        <img class="avatar" src="泠攸.png" alt="泠攸头像">
+        <h2 class="name-text">泠攸</h2>
 
-    <a href="https://space.bilibili.com/3546894596836069">
-        <h1 class="nav-btn">
-            <svg viewBox="0 0 24 24">
-                <path d="M17.813 4.653h.854c1.51.054 2.769.578 3.723 1.547 1.047.97 1.62 2.289 1.61 3.747v7.22c0 1.458-.573 2.777-1.61 3.747-.954.969-2.213 1.493-3.723 1.547H5.187c-1.51-.054-2.769-.578-3.723-1.547C.417 20.127-.156 18.808-.166 17.35V9.13c0-1.458.573-2.777 1.61-3.747.954-.969 2.213-1.493 3.723-1.547h.77l-1.174 1.173a1.624 1.624 0 0 0-1.146.473 1.617 1.617 0 0 0-.474 1.147v6.834c0 .427.17.837.474 1.147.31.306.72.473 1.146.473a1.624 1.624 0 0 0 1.147-.473L12 13.046l6.023 6.023a1.624 1.624 0 0 0 1.147.473c.426 0 .836-.167 1.146-.473.305-.31.474-.72.474-1.147V8.385c0-.427-.17-.837-.474-1.147a1.624 1.624 0 0 0-1.146-.473l-1.357-1.112zm-9.36 7.207v1.066h1.067v-1.066H8.453zm4.027 0v1.066h1.067v-1.066h-1.067z"/>
-            </svg>
-            🔥我的小号B站主页🔥
-        </h1>
-    </a>
+        <a class="block-link" href="https://space.bilibili.com/1675761755">
+            <h1 class="nav-btn">
+                <svg class="icon-svg" viewBox="0 0 24 24">
+                    <path d="M17.813 4.653h.854c1.51.054 2.769.578 3.723 1.547 1.047.97 1.62 2.289 1.61 3.747v7.22c0 1.458-.573 2.777-1.61 3.747-.954.969-2.213 1.493-3.723 1.547H5.187c-1.51-.054-2.769-.578-3.723-1.547C.417 20.127-.156 18.808-.166 17.35V9.13c0-1.458.573-2.777 1.61-3.747.954-.969 2.213-1.493 3.723-1.547h.77l-1.174 1.173a1.624 1.624 0 0 0-1.146.473 1.617 1.617 0 0 0-.474 1.147v6.834c0 .427.17.837.474 1.147.31.306.72.473 1.146.473a1.624 1.624 0 0 0 1.147-.473L12 13.046l6.023 6.023a1.624 1.624 0 0 0 1.147.473c.426 0 .836-.167 1.146-.473.305-.31.474-.72.474-1.147V8.385c0-.427-.17-.837-.474-1.147a1.624 1.624 0 0 0-1.146-.473l-1.357-1.112zm-9.36 7.207v1.066h1.067v-1.066H8.453zm4.027 0v1.066h1.067v-1.066h-1.067z"/>
+                </svg>
+                🔥我的B站主页🔥
+            </h1>
+        </a>
+        <a class="block-link" href="https://space.bilibili.com/3546894596836069">
+            <h1 class="nav-btn">
+                <svg class="icon-svg" viewBox="0 0 24 24">
+                    <path d="M17.813 4.653h.854c1.51.054 2.769.578 3.723 1.547 1.047.97 1.62 2.289 1.61 3.747v7.22c0 1.458-.573 2.777-1.61 3.747-.954.969-2.213 1.493-3.723 1.547H5.187c-1.51-.054-2.769-.578-3.723-1.547C.417 20.127-.156 18.808-.166 17.35V9.13c0-1.458.573-2.777 1.61-3.747.954-.969 2.213-1.493 3.723-1.547h.77l-1.174 1.173a1.624 1.624 0 0 0-1.146.473 1.617 1.617 0 0 0-.474 1.147v6.834c0 .427.17.837.474 1.147.31.306.72.473 1.146.473a1.624 1.624 0 0 0 1.147-.473L12 13.046l6.023 6.023a1.624 1.624 0 0 0 1.147.473c.426 0 .836-.167 1.146-.473.305-.31.474-.72.474-1.147V8.385c0-.427-.17-.837-.474-1.147a1.624 1.624 0 0 0-1.146-.473l-1.357-1.112zm-9.36 7.207v1.066h1.067v-1.066H8.453zm4.027 0v1.066h1.067v-1.066h-1.067z"/>
+                </svg>
+                🔥我的小号B站主页🔥
+            </h1>
+        </a>
 
-    <a href="downloads.html">
-        <h1 class="nav-btn">
-            <svg viewBox="0 0 24 24">
-                <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/>
-            </svg>
-            下载页面
-        </h1>
-    </a>
+        <h2 class="qq-info">我的QQ:3861238219(棍母)</h2>
 
-    <h2 class="qq-info">我的QQ:3861238219(棍母)</h2>
-
-    <div class="btn-outer">
-        <div class="btn-wrap">
-            <button class="music-btn" id="musicToggle">开启背景音乐</button>
-            <div class="progress-box">
-                <input type="range" id="progressBar" min="0" max="100" value="0">
-                <div class="time-text">
-                    <span id="currentTime">00:00</span>
-                    <span id="totalTime">00:00</span>
+        <div class="btn-outer">
+            <div class="btn-wrap">
+                <button class="music-btn" id="musicToggle">开启背景音乐</button>
+                <div class="progress-box">
+                    <input type="range" id="progressBar" min="0" max="100" value="0">
+                    <div class="time-text">
+                        <span id="currentTime">00:00</span>
+                        <span id="totalTime">00:00</span>
+                    </div>
                 </div>
+                <a target="_blank" href="https://music.163.com/song?id=39227633&uct2=U2FsdGVkX1/YtLgLNEPfFovJOsNlWn9Dx3k0ZremJIE=">
+                    <button class="netease-btn">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm-1.086 9.568c.24-.84 1.075-1.541 1.99-1.648.187.694.388 1.373.545 2.063.053.23.037.495-.018.727-.213.892-1.248 1.242-1.978.685-.53-.405-.742-1.12-.539-1.827z"/>
+                        </svg>
+                    </button>
+                </a>
             </div>
-            <a target="_blank" href="https://music.163.com/song?id=39227633&uct2=U2FsdGVkX1/YtLgLNEPfFovJOsNlWn9Dx3k0ZremJIE=">
-                <button class="netease-btn">
-                    <svg viewBox="0 0 24 24">
-                        <path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm-1.086 9.568c.24-.84 1.075-1.541 1.99-1.648.187.694.388 1.373.545 2.063.053.23.037.495-.018.727-.213.892-1.248 1.242-1.978.685-.53-.405-.742-1.12-.539-1.827z"/>
+        </div>
+    </div>
+
+    <!-- 下载内容区块 -->
+    <div class="page" id="page-download">
+        <h1 class="download-title">应用下载</h1>
+        <div class="download-box">
+            <div class="download-item">
+                <a href="/downloads/steam.exe" download class="download-btn">
+                    <svg class="dl-svg" viewBox="0 0 24 24">
+                        <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z" />
                     </svg>
-                </button>
-            </a>
+                    点击下载自制steam
+                </a>
+                <div class="file-size">文件大小：38.2 MB</div>
+            </div>
+            <div class="download-item">
+                <a href="/downloads/小游戏大全.exe" download class="download-btn">
+                    <svg class="dl-svg" viewBox="0 0 24 24">
+                        <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z" />
+                    </svg>
+                    点击下载小游戏大全
+                </a>
+                <div class="file-size">文件大小：126.7 MB</div>
+            </div>
         </div>
     </div>
 
@@ -269,19 +433,71 @@
     
 
     <script>
-        // 昼夜切换函数
+        const sunSvg = document.querySelector('.sun');
+        const moonSvg = document.querySelector('.moon');
         function openDark(box) {
             let body = document.body;
-            if (box.state == null) {
-                box.state = false;
-            }
+            if (box.state == null) box.state = false;
             if (box.state) {
                 body.className = "light";
+                sunSvg.style.display="block";
+                moonSvg.style.display="none";
             } else {
                 body.className = "dark";
+                sunSvg.style.display="none";
+                moonSvg.style.display="block";
             }
             box.state = !box.state;
         }
+
+        const slide = document.querySelector('.slide');
+        const slideShadow = document.querySelector('.slide-shadow');
+        const links = Array.from(document.querySelectorAll('.nav a'));
+        const homePage = document.getElementById('page-home');
+        const downloadPage = document.getElementById('page-download');
+
+        function switchPage(pageName){
+            homePage.classList.remove('active');
+            downloadPage.classList.remove('active');
+            if(pageName === "home"){
+                homePage.classList.add('active');
+            }else if(pageName === "download"){
+                downloadPage.classList.add('active');
+            }
+        }
+
+        const moveSlide = (targetEl, slideEl) => {
+            const navRect = targetEl.closest('.nav').getBoundingClientRect();
+            const targetRect = targetEl.getBoundingClientRect();
+            const left = targetRect.left - navRect.left;
+            const width = targetRect.width;
+            slideEl.style.left = `${left}px`;
+            slideEl.style.width = `${width}px`;
+        };
+        const aClick = (el) => {
+            moveSlide(el, slide);
+            slide.style.opacity = '1';
+            const pg = el.getAttribute("data-page");
+            switchPage(pg);
+        };
+        const aMouseover = (el) => {
+            moveSlide(el, slideShadow);
+            slideShadow.style.opacity = '1';
+            slideShadow.classList.add('squeeze');
+        };
+        const aMouseout = () => {
+            slideShadow.style.opacity = '0';
+            slideShadow.classList.remove('squeeze');
+        };
+        links.forEach((el) => {
+            el.addEventListener('click', (e)=>{
+                e.preventDefault();
+                aClick(el);
+            });
+            el.addEventListener('mouseover', () => aMouseover(el));
+            el.addEventListener('mouseout', aMouseout);
+        });
+        if (links.length) aClick(links[0]);
 
         const audio = document.getElementById("bgMusic");
         const toggleBtn = document.getElementById("musicToggle");
@@ -289,26 +505,21 @@
         const currentTimeEl = document.getElementById("currentTime");
         const totalTimeEl = document.getElementById("totalTime");
         let musicPlayed = false;
-
         function formatTime(sec){
             let m = Math.floor(sec / 60);
             let s = Math.floor(sec % 60);
             return (m<10?"0"+m:m) + ":" + (s<10?"0"+s:s);
         }
-
         audio.addEventListener("loadedmetadata", ()=>{
             totalTimeEl.innerText = formatTime(audio.duration);
         })
-
         audio.addEventListener("timeupdate", ()=>{
             progressBar.value = (audio.currentTime / audio.duration) * 100;
             currentTimeEl.innerText = formatTime(audio.currentTime);
         })
-
         progressBar.addEventListener("input", ()=>{
             audio.currentTime = (progressBar.value / 100) * audio.duration;
         })
-
         document.addEventListener("click",function(){
             if(!musicPlayed){
                 audio.play();
@@ -316,7 +527,6 @@
                 toggleBtn.innerText = "关闭背景音乐";
             }
         })
-
         toggleBtn.addEventListener("click",(e)=>{
             e.stopPropagation();
             if(audio.paused){
@@ -327,7 +537,6 @@
                 toggleBtn.innerText = "开启背景音乐";
             }
         })
-
         window.onload = function() {
             const times = 3;
             for(let i = 1; i <= times; i++) {
