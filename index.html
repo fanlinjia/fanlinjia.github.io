@@ -101,7 +101,7 @@
         }
         .nav li a {
             position: relative;
-            padding: 0 28px;
+            padding: 0 22px;
             font-weight: 500;
             font-size:16px;
             border: none;
@@ -144,7 +144,6 @@
         .page.active{
             display:block;
         }
-        /*首页区块 */
         .avatar {
             border-radius: 50%;
             border: 4px solid #003bfd;
@@ -275,7 +274,6 @@
         body.dark .time-text{
             color:#ccccff;
         }
-        /*下载页面区块 */
         .download-title{
             font-size:42px;
             margin-bottom:20px;
@@ -336,6 +334,51 @@
             height:22px;
             fill:white;
         }
+        .game-title{
+            font-size:42px;
+            margin-bottom:20px;
+            color: blueviolet;
+            text-shadow:0 0 20px blueviolet;
+        }
+        body.dark .game-title{
+            color:#c5aaff;
+        }
+        .snake-wrap{
+            max-width:420px;
+            margin:0 auto;
+        }
+        #snakeCanvas{
+            border-radius:10px;
+            background:#fff;
+            max-width:100%;
+        }
+        .game-info{
+            margin:12px 0;
+            font-size:18px;
+        }
+        body.dark .game-info{
+            color:#eee;
+        }
+        .game-tip{
+            font-size:14px;
+            color:#444;
+            margin-bottom:12px;
+        }
+        body.dark .game-tip{
+            color:#ccc;
+        }
+        .game-btn{
+            padding:8px 20px;
+            font-size:16px;
+            border-radius:8px;
+            border:none;
+            background:#5b6bf8;
+            color:#fff;
+            cursor:pointer;
+        }
+        .game-btn:hover{
+            background:#4351d8;
+        }
     </style>
 </head>
 <body class="light">
@@ -355,10 +398,10 @@
             <li class="slide-shadow"></li>
             <li><a data-page="home">首页</a></li>
             <li><a data-page="download">下载</a></li>
+            <li><a data-page="game">游戏</a></li>
         </ul>
     </div>
 
-    <!-- 首页内容区块 -->
     <div class="page active" id="page-home">
         <img class="avatar" src="泠攸.png" alt="泠攸头像">
         <h2 class="name-text">泠攸</h2>
@@ -403,7 +446,6 @@
         </div>
     </div>
 
-    <!-- 下载内容区块 -->
     <div class="page" id="page-download">
         <h1 class="download-title">应用下载</h1>
         <div class="download-box">
@@ -425,6 +467,16 @@
                 </a>
                 <div class="file-size">文件大小：126.7 MB</div>
             </div>
+        </div>
+    </div>
+
+    <div class="page" id="page-game">
+        <h1 class="game-title">🐍贪吃蛇小游戏</h1>
+        <div class="snake-wrap">
+            <p class="game-tip">键盘 ↑ ↓ ← → 控制方向，撞墙会从另一边穿出来</p>
+            <canvas id="snakeCanvas" width="400" height="400"></canvas>
+            <div class="game-info">分数：<span id="scoreText">0</span></div>
+            <button class="game-btn" id="restartSnake">重新开始游戏</button>
         </div>
     </div>
 
@@ -455,14 +507,19 @@
         const links = Array.from(document.querySelectorAll('.nav a'));
         const homePage = document.getElementById('page-home');
         const downloadPage = document.getElementById('page-download');
+        const gamePage = document.getElementById('page-game');
 
         function switchPage(pageName){
             homePage.classList.remove('active');
             downloadPage.classList.remove('active');
+            gamePage.classList.remove('active');
             if(pageName === "home"){
                 homePage.classList.add('active');
             }else if(pageName === "download"){
                 downloadPage.classList.add('active');
+            }else if(pageName === "game"){
+                gamePage.classList.add('active');
+                snakeGame.init();
             }
         }
 
@@ -543,6 +600,85 @@
                 alert(`防人机验证，请点击确定（第${i}/${times}次）`);
             }
         }
+
+        const snakeCanvas = document.getElementById('snakeCanvas');
+        const ctx = snakeCanvas.getContext('2d');
+        const scoreText = document.getElementById('scoreText');
+        const restartBtn = document.getElementById('restartSnake');
+        const grid = 20;
+        let snakeGame = {
+            snake:[],
+            food:{x:0,y:0},
+            dir:'right',
+            nextDir:'right',
+            score:0,
+            timer:null,
+            init:function(){
+                clearInterval(this.timer);
+                this.snake = [{x:6*grid,y:6*grid}];
+                this.dir = 'right';
+                this.nextDir = 'right';
+                this.score = 0;
+                scoreText.innerText = this.score;
+                this.createFood();
+                this.timer = setInterval(()=>this.update(),120);
+            },
+            createFood:function(){
+                let max = snakeCanvas.width/grid -1;
+                this.food.x = Math.floor(Math.random()*max)*grid;
+                this.food.y = Math.floor(Math.random()*max)*grid;
+            },
+            update:function(){
+                this.dir = this.nextDir;
+                let head = {...this.snake[0]};
+                if(this.dir==='right') head.x +=grid;
+                if(this.dir==='left') head.x -=grid;
+                if(this.dir==='up') head.y -=grid;
+                if(this.dir==='down') head.y +=grid;
+
+                const w = snakeCanvas.width;
+                const h = snakeCanvas.height;
+                if(head.x >= w) head.x = 0;
+                if(head.x < 0) head.x = w - grid;
+                if(head.y >= h) head.y = 0;
+                if(head.y < 0) head.y = h - grid;
+
+                for(let seg of this.snake){
+                    if(seg.x===head.x&&seg.y===head.y){
+                        clearInterval(this.timer);
+                        return;
+                    }
+                }
+                this.snake.unshift(head);
+                if(head.x===this.food.x&&head.y===this.food.y){
+                    this.score +=10;
+                    scoreText.innerText = this.score;
+                    this.createFood();
+                }else{
+                    this.snake.pop();
+                }
+                this.draw();
+            },
+            draw:function(){
+                ctx.fillStyle="#ffffff";
+                ctx.fillRect(0,0,snakeCanvas.width,snakeCanvas.height);
+                ctx.fillStyle="#ff4444";
+                ctx.fillRect(this.food.x,this.food.y,grid-1,grid-1);
+                ctx.fillStyle="#22bb22";
+                for(let i=0;i<this.snake.length;i++){
+                    let s = this.snake[i];
+                    ctx.fillRect(s.x,s.y,grid-1,grid-1);
+                }
+            }
+        };
+        document.addEventListener('keydown',(e)=>{
+            if(!gamePage.classList.contains('active')) return;
+            if(e.key==='ArrowUp'&&snakeGame.dir!=='down') snakeGame.nextDir='up';
+            if(e.key==='ArrowDown'&&snakeGame.dir!=='up') snakeGame.nextDir='down';
+            if(e.key==='ArrowLeft'&&snakeGame.dir!=='right') snakeGame.nextDir='left';
+            if(e.key==='ArrowRight'&&snakeGame.dir!=='left') snakeGame.nextDir='right';
+        });
+        restartBtn.addEventListener('click',()=>snakeGame.init());
     </script>
 </body>
 </html>
