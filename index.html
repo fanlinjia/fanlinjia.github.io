@@ -351,6 +351,7 @@
             border-radius:10px;
             background:#fff;
             max-width:100%;
+            touch-action:none;
         }
         .game-info{
             margin:12px 0;
@@ -378,6 +379,29 @@
         }
         .game-btn:hover{
             background:#4351d8;
+        }
+        .control-panel{
+            margin-top:20px;
+            display:grid;
+            grid-template-columns: 60px 60px 60px;
+            grid-template-rows: 60px 60px 60px;
+            gap:8px;
+            justify-content:center;
+        }
+        .ctrl-btn{
+            font-size:22px;
+            border:none;
+            border-radius:10px;
+            background:#7283ff;
+            color:white;
+            cursor:pointer;
+        }
+        .ctrl-btn:active{
+            background:#4e60e6;
+        }
+        .empty{
+            background:transparent;
+            border:none;
         }
     </style>
 </head>
@@ -473,10 +497,24 @@
     <div class="page" id="page-game">
         <h1 class="game-title">🐍贪吃蛇小游戏</h1>
         <div class="snake-wrap">
-            <p class="game-tip">键盘 ↑ ↓ ← → 控制方向，撞墙会从另一边穿出来</p>
+            <p class="game-tip">电脑：方向键｜手机：滑动画布 / 点击下方按钮，撞墙穿墙，撞自己结束</p>
             <canvas id="snakeCanvas" width="400" height="400"></canvas>
             <div class="game-info">分数：<span id="scoreText">0</span></div>
             <button class="game-btn" id="restartSnake">重新开始游戏</button>
+
+            <div class="control-panel">
+                <button class="ctrl-btn empty"></button>
+                <button class="ctrl-btn" data-dir="up">↑</button>
+                <button class="ctrl-btn empty"></button>
+
+                <button class="ctrl-btn" data-dir="left">←</button>
+                <button class="ctrl-btn empty"></button>
+                <button class="ctrl-btn" data-dir="right">→</button>
+
+                <button class="ctrl-btn empty"></button>
+                <button class="ctrl-btn" data-dir="down">↓</button>
+                <button class="ctrl-btn empty"></button>
+            </div>
         </div>
     </div>
 
@@ -606,6 +644,8 @@
         const scoreText = document.getElementById('scoreText');
         const restartBtn = document.getElementById('restartSnake');
         const grid = 20;
+        let touchStartX=0,touchStartY=0;
+
         let snakeGame = {
             snake:[],
             food:{x:0,y:0},
@@ -669,16 +709,52 @@
                     let s = this.snake[i];
                     ctx.fillRect(s.x,s.y,grid-1,grid-1);
                 }
+            },
+            setNextDir:function(d){
+                if(d==='up'&&this.dir!=='down') this.nextDir='up';
+                if(d==='down'&&this.dir!=='up') this.nextDir='down';
+                if(d==='left'&&this.dir!=='right') this.nextDir='left';
+                if(d==='right'&&this.dir!=='left') this.nextDir='right';
             }
         };
+
         document.addEventListener('keydown',(e)=>{
             if(!gamePage.classList.contains('active')) return;
-            if(e.key==='ArrowUp'&&snakeGame.dir!=='down') snakeGame.nextDir='up';
-            if(e.key==='ArrowDown'&&snakeGame.dir!=='up') snakeGame.nextDir='down';
-            if(e.key==='ArrowLeft'&&snakeGame.dir!=='right') snakeGame.nextDir='left';
-            if(e.key==='ArrowRight'&&snakeGame.dir!=='left') snakeGame.nextDir='right';
+            if(e.key==='ArrowUp') snakeGame.setNextDir('up');
+            if(e.key==='ArrowDown') snakeGame.setNextDir('down');
+            if(e.key==='ArrowLeft') snakeGame.setNextDir('left');
+            if(e.key==='ArrowRight') snakeGame.setNextDir('right');
         });
+
+        snakeCanvas.addEventListener('touchstart',(e)=>{
+            const t = e.touches[0];
+            touchStartX = t.clientX;
+            touchStartY = t.clientY;
+        });
+        snakeCanvas.addEventListener('touchend',(e)=>{
+            if(!gamePage.classList.contains('active')) return;
+            const t = e.changedTouches[0];
+            const dx = t.clientX - touchStartX;
+            const dy = t.clientY - touchStartY;
+            const minMove =30;
+            if(Math.abs(dx)>Math.abs(dy)){
+                if(dx>minMove) snakeGame.setNextDir('right');
+                else if(dx<-minMove) snakeGame.setNextDir('left');
+            }else{
+                if(dy>minMove) snakeGame.setNextDir('down');
+                else if(dy<-minMove) snakeGame.setNextDir('up');
+            }
+        },{passive:false});
+
         restartBtn.addEventListener('click',()=>snakeGame.init());
+
+        document.querySelectorAll('.ctrl-btn[data-dir]').forEach(btn=>{
+            btn.addEventListener('click',()=>{
+                if(!gamePage.classList.contains('active')) return;
+                const d = btn.getAttribute('data-dir');
+                snakeGame.setNextDir(d);
+            });
+        });
     </script>
 </body>
 </html>
